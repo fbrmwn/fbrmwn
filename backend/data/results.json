@@ -1,0 +1,33 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "studentName": "Andi Wijaya",
+      "studentClass": "XII RPL 1",
+      "studentNIS": "2024001",
+      "subject": "basis_data",
+      "finalScore": 85.5,
+      "totalScore": 28.5,
+      "maxScore": 35,
+      "timeUsed": 3600,
+      "questionScores": [
+        {
+          "questionId": 1,
+          "type": "coding",
+          "score": 18,
+          "maxScore": 20,
+          "studentAnswer": "SELECT * FROM mahasiswa WHERE status = 'aktif';"
+        },
+        {
+          "questionId": 2,
+          "type": "essay",
+          "score": 10.5,
+          "maxScore": 15,
+          "studentAnswer": "PRIMARY KEY adalah kunci utama yang unik, FOREIGN KEY adalah kunci asing yang mereferensi ke tabel lain"
+        }
+      ],
+      "timestamp": "2024-01-15T10:30:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Latihan Soal - Coding & Esai</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
+</head>
+<body>
+    <!-- Admin Control Panel -->
+    <div id="adminPanel" class="admin-panel">
+        <h2><i class="fas fa-cog"></i> Admin Control</h2>
+        <div class="admin-controls">
+            <button onclick="app.startTest()" class="btn btn-success">
+                <i class="fas fa-play"></i> Start Test
+            </button>
+            <button onclick="app.endTest()" class="btn btn-danger">
+                <i class="fas fa-stop"></i> End Test
+            </button>
+            <button onclick="app.showAdminModal()" class="btn btn-info">
+                <i class="fas fa-plus"></i> Kelola Data
+            </button>
+            <button onclick="app.exportResults()" class="btn btn-warning">
+                <i class="fas fa-download"></i> Export Hasil
+            </button>
+        </div>
+        <div id="timer" class="timer">00:00:00</div>
+    </div>
+
+    <!-- Student Interface -->
+    <div id="studentInterface" class="student-interface">
+        <header class="header">
+            <h1><i class="fas fa-code"></i> Sistem Latihan Soal</h1>
+            <p>Platform latihan coding dan esai untuk siswa</p>
+        </header>
+
+        <div class="student-setup">
+            <div class="form-group">
+                <label for="studentSelect"><i class="fas fa-user"></i> Pilih Nama Siswa:</label>
+                <select id="studentSelect" class="form-control">
+                    <option value="">-- Pilih Nama --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subjectSelect"><i class="fas fa-book"></i> Mata Pelajaran:</label>
+                <select id="subjectSelect" class="form-control">
+                    <option value="basis_data">Basis Data</option>
+                    <option value="ppl">PPL</option>
+                    <option value="pwpb">PWPB</option>
+                    <option value="pbo">PBO</option>
+                </select>
+            </div>
+
+            <div id="studentInfo" class="student-info hidden">
+                <i class="fas fa-user-check"></i> 
+                <span id="selectedStudent">Siswa terpilih akan muncul di sini</span>
+            </div>
+        </div>
+
+        <!-- Test Interface -->
+        <div id="testInterface" class="test-interface hidden">
+            <div class="test-header">
+                <h3 id="testSubject">Mata Pelajaran: </h3>
+                <div class="test-info">
+                    <span id="currentQuestion">Soal 1/0</span>
+                    <span id="timeLeft">Waktu: 00:00:00</span>
+                </div>
+            </div>
+
+            <div id="questionContainer" class="question-container">
+                <!-- Questions will be loaded here -->
+            </div>
+
+            <div class="navigation-buttons">
+                <button onclick="app.previousQuestion()" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Sebelumnya
+                </button>
+                <button onclick="app.nextQuestion()" class="btn btn-primary">
+                    Selanjutnya <i class="fas fa-arrow-right"></i>
+                </button>
+                <button onclick="app.submitTest()" class="btn btn-success">
+                    <i class="fas fa-paper-plane"></i> Submit Test
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Interface -->
+        <div id="resultContainer" class="result-container hidden">
+            <!-- Results will be shown here -->
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="app.hideAdminModal()">&times;</span>
+            <h3><i class="fas fa-tools"></i> Admin Management</h3>
+            
+            <div class="modal-tabs">
+                <button class="tab-btn active" onclick="app.showTab('students')">Manage Siswa</button>
+                <button class="tab-btn" onclick="app.showTab('questions')">Manage Soal</button>
+                <button class="tab-btn" onclick="app.showTab('results')">Lihat Hasil</button>
+            </div>
+
+            <!-- Students Tab -->
+            <div id="studentsTab" class="tab-content">
+                <h4><i class="fas fa-users"></i> Daftar Siswa</h4>
+                <div class="add-student-form">
+                    <input type="text" id="newStudentName" placeholder="Nama Siswa" class="form-control">
+                    <input type="text" id="newStudentClass" placeholder="Kelas" class="form-control">
+                    <input type="text" id="newStudentNIS" placeholder="NIS" class="form-control">
+                    <button onclick="app.addStudent()" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Tambah Siswa
+                    </button>
+                </div>
+                <div id="studentsList" class="data-list"></div>
+            </div>
+
+            <!-- Questions Tab -->
+            <div id="questionsTab" class="tab-content hidden">
+                <h4><i class="fas fa-question-circle"></i> Manage Soal</h4>
+                <div class="question-form">
+                    <select id="questionSubject" class="form-control">
+                        <option value="basis_data">Basis Data</option>
+                        <option value="ppl">PPL</option>
+                        <option value="pwpb">PWPB</option>
+                        <option value="pbo">PBO</option>
+                    </select>
+                    
+                    <select id="questionType" class="form-control">
+                        <option value="coding">Soal Coding</option>
+                        <option value="essay">Soal Esai</option>
+                    </select>
+                    
+                    <textarea id="questionText" placeholder="Tulis pertanyaan di sini..." class="form-control" rows="3"></textarea>
+                    
+                    <div id="codingFields">
+                        <label>Template Code:</label>
+                        <textarea id="codeTemplate" placeholder="Template code awal..." class="form-control code-editor" rows="4"></textarea>
+                        
+                        <label>Test Cases (JSON):</label>
+                        <textarea id="testCases" placeholder='[{"input": "", "expected": "output yang diharapkan"}]' class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div id="essayFields" class="hidden">
+                        <label>Kunci Jawaban (pisahkan dengan koma):</label>
+                        <textarea id="answerKey" placeholder="kata kunci 1, kata kunci 2, ..." class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    <input type="number" id="questionPoints" placeholder="Poin" class="form-control" value="10" min="1" max="100">
+                    
+                    <button onclick="app.addQuestion()" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Tambah Soal
+                    </button>
+                </div>
+                <div id="questionsList" class="data-list"></div>
+            </div>
+
+            <!-- Results Tab -->
+            <div id="resultsTab" class="tab-content hidden">
+                <h4><i class="fas fa-chart-bar"></i> Hasil Test</h4>
+                <div class="results-controls">
+                    <select id="resultsSubject" class="form-control">
+                        <option value="all">Semua Mata Pelajaran</option>
+                        <option value="basis_data">Basis Data</option>
+                        <option value="ppl">PPL</option>
+                        <option value="pwpb">PWPB</option>
+                        <option value="pbo">PBO</option>
+                    </select>
+                    <button onclick="app.loadResults()" class="btn btn-primary">Tampilkan Hasil</button>
+                </div>
+                <div id="resultsList" class="data-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Memproses...</p>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "Andi Wijaya",
+      "class": "XII RPL 1",
+      "nis": "2024001",
+      "createdAt": "2024-01-15T08:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Budi Santoso",
+      "class": "XII RPL 1",
+      "nis": "2024002",
+      "createdAt": "2024-01-15T08:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Citra Lestari",
+      "class": "XII RPL 2",
+      "nis": "2024003",
+      "createdAt": "2024-01-15T08:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "name": "Dewi Anggraini",
+      "class": "XII RPL 2",
+      "nis": "2024004",
+      "createdAt": "2024-01-15T08:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "name": "Eko Pratama",
+      "class": "XII RPL 3",
+      "nis": "2024005",
+      "createdAt": "2024-01-15T08:00:00.000Z"
+    }
+  ]
+}
